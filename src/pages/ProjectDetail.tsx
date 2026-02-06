@@ -6,6 +6,7 @@ import { projects } from '../data/projects';
 const ProjectDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const project = projects.find(p => p.id === id);
+    const isOpenChatDemo = project?.demoUrl === '#open-chat';
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -79,7 +80,16 @@ const ProjectDetail: React.FC = () => {
                             {project.datasetTitle || "Dataset / Kaggle"}
                         </a>
                     )}
-                    {project.demoUrl && project.demoUrl !== '#' && (
+                    {project.demoUrl && project.demoUrl !== '#' && isOpenChatDemo && (
+                        <button
+                            onClick={() => window.dispatchEvent(new Event('open-portfolio-chat'))}
+                            className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                            <Play size={20} className="mr-2" />
+                            {project.demoTitle || "Live Demo"}
+                        </button>
+                    )}
+                    {project.demoUrl && project.demoUrl !== '#' && !isOpenChatDemo && (
                         <a
                             href={project.demoUrl}
                             target="_blank"
@@ -87,7 +97,7 @@ const ProjectDetail: React.FC = () => {
                             className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                         >
                             <Play size={20} className="mr-2" />
-                            Live Demo
+                            {project.demoTitle || "Live Demo"}
                         </a>
                     )}
                 </div>
@@ -130,6 +140,84 @@ const ProjectDetail: React.FC = () => {
                                                 ))}
                                             </tbody>
                                         </table>
+                                    </div>
+                                );
+                            }
+                            if (line.trim() === '{{DATASET_HEAD_IMAGE}}' && project.overviewImage) {
+                                return (
+                                    <div key={index} className="my-8 rounded-xl overflow-hidden shadow-lg border border-gray-100">
+                                        <img
+                                            src={project.overviewImage}
+                                            alt="Dataset Preview"
+                                            className="w-full h-auto object-contain bg-white"
+                                        />
+                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">Dataset Head Preview</p>
+                                    </div>
+                                );
+                            }
+                            if (line.trim() === '{{METHODOLOGY_IMAGE}}' && project.analysisImage) {
+                                return (
+                                    <div key={index} className="my-8 rounded-xl overflow-hidden shadow-lg border border-gray-100">
+                                        <img
+                                            src={project.analysisImage}
+                                            alt="Methodology Preview"
+                                            className="w-full h-auto object-contain bg-white"
+                                        />
+                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">EDA: Behavior by Parenthood Status</p>
+                                    </div>
+                                );
+                            }
+                            if (line.trim() === '{{METHODOLOGY_IMAGE_2}}' && project.initialDataImage) {
+                                return (
+                                    <div key={index} className="my-8 rounded-xl overflow-hidden shadow-lg border border-gray-100">
+                                        <img
+                                            src={project.initialDataImage}
+                                            alt="Methodology Preview 2"
+                                            className="w-full h-auto object-contain bg-white"
+                                        />
+                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">EDA: Correlation Matrix of Numerical Features</p>
+                                    </div>
+                                );
+                            }
+                            if (line.trim() === '{{FEATURE_ENGINEERING_IMAGE}}' && project.numericalDistributionImage) {
+                                return (
+                                    <div key={index} className="my-8">
+                                        <div className="max-w-xl mx-auto rounded-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                                            <img
+                                                src={project.numericalDistributionImage}
+                                                alt="Feature Engineering Preview"
+                                                className="w-full h-auto object-contain bg-white"
+                                            />
+                                        </div>
+                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">Feature Engineering Snapshot</p>
+                                    </div>
+                                );
+                            }
+                            if (line.trim() === '{{PROFILING_IMAGE}}' && project.profilingImage) {
+                                return (
+                                    <div key={index} className="my-8">
+                                        <div className="max-w-3xl mx-auto rounded-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                                            <img
+                                                src={project.profilingImage}
+                                                alt="Segmentation Profiling"
+                                                className="w-full h-auto object-contain bg-white"
+                                            />
+                                        </div>
+                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">Segment Profiling Snapshot</p>
+                                    </div>
+                                );
+                            }
+                            if (line.trim() === '{{PROFILING_IMAGE_2}}' && project.profilingImageSecondary) {
+                                return (
+                                    <div key={index} className="my-8">
+                                        <div className="max-w-3xl mx-auto rounded-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                                            <img
+                                                src={project.profilingImageSecondary}
+                                                alt="Segmentation Profiling 2"
+                                                className="w-full h-auto object-contain bg-white"
+                                            />
+                                        </div>
+                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">Segment Profiling Snapshot</p>
                                     </div>
                                 );
                             }
@@ -272,13 +360,35 @@ const ProjectDetail: React.FC = () => {
                             }
                             if (line.trim() === '{{MODELS_IMAGE}}' && project.modelsImage) {
                                 return (
-                                    <div key={index} className="my-8 rounded-xl overflow-hidden shadow-lg border border-gray-100">
-                                        <img
-                                            src={project.modelsImage}
-                                            alt="Machine Learning Models"
-                                            className="w-full h-auto object-contain bg-white"
-                                        />
-                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">Algorithms Compared</p>
+                                    <div key={index} className="my-8">
+                                        <div className="grid gap-6 lg:grid-cols-2">
+                                            <div className="rounded-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                                                <img
+                                                    src={project.modelsImage}
+                                                    alt="Modeling Approach"
+                                                    className="w-full h-auto object-contain bg-white"
+                                                />
+                                            </div>
+                                            {project.modelsImageSecondary && (
+                                                <div className="rounded-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                                                    <img
+                                                        src={project.modelsImageSecondary}
+                                                        alt="Modeling Approach 2"
+                                                        className="w-full h-auto object-contain bg-white"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                        {project.modelsImageTertiary && (
+                                            <div className="mt-6 max-w-3xl mx-auto rounded-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                                                <img
+                                                    src={project.modelsImageTertiary}
+                                                    alt="Modeling Approach 3"
+                                                    className="w-full h-auto object-contain bg-white"
+                                                />
+                                            </div>
+                                        )}
+                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">Modeling Approach</p>
                                     </div>
                                 );
                             }

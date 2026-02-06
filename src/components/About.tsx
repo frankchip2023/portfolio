@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Code, Database, GraduationCap, Award, ExternalLink } from 'lucide-react';
+import { BookOpen, Code, Database, GraduationCap, Award, ExternalLink, Download } from 'lucide-react';
 
 const About: React.FC = () => {
     return (
@@ -14,12 +14,22 @@ const About: React.FC = () => {
 
                     {/* Column 1: Profile Photo (Left - 3 cols) */}
                     <div className="lg:col-span-3 flex justify-center lg:justify-start">
-                        <div className="relative w-64 h-64 lg:w-full lg:h-auto lg:aspect-square rounded-2xl overflow-hidden shadow-xl transform rotate-3 hover:rotate-0 transition-all duration-300">
-                            <img
-                                src="/src/assets/images/profile.jpg"
-                                alt="Frank Chipana"
-                                className="w-full h-full object-cover"
-                            />
+                        <div className="w-64 lg:w-full">
+                            <div className="relative h-64 lg:h-auto lg:aspect-square rounded-2xl overflow-hidden shadow-xl transform rotate-3 hover:rotate-0 transition-all duration-300">
+                                <img
+                                    src="/src/assets/images/profile.jpg"
+                                    alt="Frank Chipana"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <a
+                                href="/cv-frank-chipana.pdf"
+                                download
+                                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-blue-700"
+                            >
+                                <Download size={16} />
+                                Download CV (PDF)
+                            </a>
                         </div>
                     </div>
 
@@ -76,6 +86,15 @@ const About: React.FC = () => {
                                 </h3>
                                 <time className="block mb-1 text-xs font-normal leading-none text-gray-400">2026</time>
                                 <p className="text-sm font-normal text-gray-500">Professional Certificate by Google</p>
+                                <a
+                                    href="https://www.credly.com/badges/8c45a14c-cfec-46bd-a825-e6c7c9df153f/public_url"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="mt-3 inline-flex items-center gap-2 rounded-md border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700 hover:bg-green-100 transition-colors"
+                                >
+                                    <ExternalLink size={12} />
+                                    View / Download Credential
+                                </a>
                             </div>
 
                             <div className="ml-6">

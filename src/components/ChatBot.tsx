@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { MessageCircle, Send, X } from 'lucide-react';
 
@@ -31,6 +31,12 @@ const ChatBot: React.FC = () => {
     () => import.meta.env.VITE_CHAT_API_URL || 'http://127.0.0.1:8000',
     [],
   );
+
+  useEffect(() => {
+    const openChat = () => setIsOpen(true);
+    window.addEventListener('open-portfolio-chat', openChat);
+    return () => window.removeEventListener('open-portfolio-chat', openChat);
+  }, []);
 
   const sendMessage = async (event: FormEvent) => {
     event.preventDefault();

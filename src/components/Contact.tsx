@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, MapPin } from 'lucide-react';
+import { Mail, MapPin, Phone, Download, Briefcase, Clock3 } from 'lucide-react';
 
 const Contact: React.FC = () => {
     return (
@@ -40,44 +40,69 @@ const Contact: React.FC = () => {
                                 <p className="text-gray-600">Oslo, Norway</p>
                             </div>
                         </div>
+
+                        <div className="flex items-start space-x-4">
+                            <div className="bg-blue-100 p-3 rounded-lg text-blue-600">
+                                <Phone size={24} />
+                            </div>
+                            <div>
+                                <h4 className="text-lg font-semibold text-gray-900">Phone</h4>
+                                <div className="text-gray-600">
+                                    <a href="tel:+4745840940" className="hover:text-blue-600 transition-colors">
+                                        +47 458 40 940
+                                    </a>
+                                    <span className="mx-2 text-gray-400">/</span>
+                                    <a href="tel:+51997465203" className="hover:text-blue-600 transition-colors">
+                                        +51 997 465 203
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Contact Form */}
-                    <form className="space-y-6 bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-100">
-                        <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                            <input
-                                type="text"
-                                id="name"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                                placeholder="Your Name"
-                            />
+                    <div className="space-y-6 bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 className="text-2xl font-bold text-gray-900">Work With Me</h3>
+                        <p className="text-gray-600 leading-relaxed">
+                            I collaborate on data science, machine learning, and analytics projects from discovery to deployment.
+                        </p>
+
+                        <div className="space-y-4">
+                            <div className="flex items-start gap-3">
+                                <div className="bg-blue-100 p-2 rounded-lg text-blue-600">
+                                    <Briefcase size={18} />
+                                </div>
+                                <p className="text-sm text-gray-700">
+                                    Available for full-time roles, consulting, and project-based collaborations.
+                                </p>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <div className="bg-blue-100 p-2 rounded-lg text-blue-600">
+                                    <Clock3 size={18} />
+                                </div>
+                                <p className="text-sm text-gray-700">
+                                    Typical response time: within 24 hours.
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                                placeholder="your@email.com"
-                            />
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                            <a
+                                href="mailto:frank.chipana@outlook.com"
+                                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
+                            >
+                                <Mail size={16} />
+                                Send Email
+                            </a>
+                            <a
+                                href="/cv-frank-chipana.pdf"
+                                download
+                                className="inline-flex items-center justify-center gap-2 rounded-lg border border-blue-200 bg-white px-4 py-3 text-sm font-semibold text-blue-700 hover:bg-blue-50 transition-colors"
+                            >
+                                <Download size={16} />
+                                Download CV
+                            </a>
                         </div>
-                        <div>
-                            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                            <textarea
-                                id="message"
-                                rows={4}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                                placeholder="Your message..."
-                            ></textarea>
-                        </div>
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-600 text-white font-medium py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
-                        >
-                            Send Message
-                        </button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </section>

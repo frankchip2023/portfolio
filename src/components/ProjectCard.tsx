@@ -11,10 +11,17 @@ interface ProjectCardProps {
     githubUrl?: string;
     kaggleUrl?: string; // Additional link for Kaggle
     demoUrl?: string;
+    demoTitle?: string;
     codeTitle?: string;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ id, title, description, tags, imageUrl, githubUrl, kaggleUrl, demoUrl, codeTitle }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ id, title, description, tags, imageUrl, githubUrl, kaggleUrl, demoUrl, demoTitle, codeTitle }) => {
+    const isOpenChatDemo = demoUrl === '#open-chat';
+
+    const handleOpenChat = () => {
+        window.dispatchEvent(new Event('open-portfolio-chat'));
+    };
+
     return (
         <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full border border-gray-100 group">
             <Link to={`/project/${id}`} className="block relative h-48 overflow-hidden cursor-pointer">
@@ -59,10 +66,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ id, title, description, tags,
                             Kaggle
                         </a>
                     )}
-                    {demoUrl && (
+                    {demoUrl && isOpenChatDemo && (
+                        <button onClick={handleOpenChat} className="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                            <ExternalLink size={18} className="mr-2" />
+                            {demoTitle || "View Project"}
+                        </button>
+                    )}
+                    {demoUrl && !isOpenChatDemo && (
                         <a href={demoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
                             <ExternalLink size={18} className="mr-2" />
-                            View Project
+                            {demoTitle || "View Project"}
                         </a>
                     )}
                 </div>

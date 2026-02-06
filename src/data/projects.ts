@@ -12,6 +12,16 @@ import churnEvaluation from '../assets/images/churn_model_evaluation.png';
 import churnNumerical from '../assets/images/churn_numerical_distribution.png';
 import churnFeatureImportance from '../assets/images/churn_feature_importance.png';
 import churnMain from '../assets/images/churn_main.png';
+import segmentationDatasetHead from '../assets/images/segmentation_dataset_head.png';
+import segmentationMethodology from '../assets/images/segmentation_methodology.png';
+import segmentationMethodologySecond from '../assets/images/segmentation_methodology_2.png';
+import segmentationFeatureEngineering from '../assets/images/segmentation_feature_engineering.png';
+import segmentationModelsCompared from '../assets/images/segmentation_models_compared.png';
+import segmentationModelingApproachSecond from '../assets/images/segmentation_modeling_approach_2.png';
+import segmentationModelingApproachThird from '../assets/images/segmentation_modeling_approach_3.png';
+import segmentationProfiling from '../assets/images/segmentation_profiling.png';
+import segmentationProfilingSecond from '../assets/images/segmentation_profiling_2.png';
+import segmentationCardImage from '../assets/images/segmentation_card.png';
 import ppeOverview from '../assets/images/ppe_overview.png';
 import ppeMain from '../assets/images/ppe_main.jpg';
 
@@ -25,6 +35,7 @@ export interface Project {
     kaggleUrl?: string;
     githubUrl?: string;
     demoUrl?: string;
+    demoTitle?: string;
     codeTitle?: string;
     overviewImage?: string; // Single image to be embedded in description
     datasetSchema?: { category: string; variables: string }[];
@@ -38,6 +49,10 @@ export interface Project {
     correlationImage?: string; // Image for Correlation Matrix
     cleaningImage?: string; // Image for Data Cleaning Process
     modelsImage?: string; // Image for Machine Learning Models
+    modelsImageSecondary?: string; // Optional second image for modeling section
+    modelsImageTertiary?: string; // Optional third image for modeling section
+    profilingImage?: string;
+    profilingImageSecondary?: string;
     evaluationImage?: string; // Image for Model Evaluation Metrics
     featureImportanceImage?: string; // Image for Feature Importance
     datasetTitle?: string; // Custom title for the dataset button (e.g. "Roboflow")
@@ -178,69 +193,6 @@ Next steps include improving model interpretability using SHAP, optimizing class
         ]
     },
     {
-        id: "sales-forecasting",
-        title: "Sales Forecasting Model",
-        description: "End-to-end time series forecasting to predict weekly retail demand and improve inventory, promotion planning, and stock availability.",
-        longDescription: `
-### Business Context
-Retail teams needed reliable weekly sales forecasts to reduce stockouts, avoid overstock, and plan promotions with greater confidence.
-
-### Project Goal
-Build a robust forecasting pipeline that predicts future sales and compares multiple models to select the best performer for production use.
-
-### Dataset Scope
-- Weekly historical sales by product category and store.
-- Calendar variables (month, week, holidays, special campaigns).
-- External signals (price changes and promotional windows).
-
-### Methodology
-1. Data quality checks and missing value treatment.
-2. Time-based feature engineering.
-3. Exploratory analysis of trend, seasonality, and anomalies.
-4. Model training and tuning.
-5. Rolling backtesting and error analysis.
-
-### Feature Engineering
-- Lag features (t-1, t-2, t-4, t-8).
-- Rolling statistics (mean, std, min/max windows).
-- Calendar features (week of year, month, holiday flags).
-- Promotion and pricing indicators.
-
-### Models Compared
-- Seasonal Naive (baseline).
-- ARIMA / SARIMA.
-- Prophet.
-- Gradient Boosting Regressor for tabular time features.
-
-### Validation Strategy
-- Rolling-origin cross-validation to simulate real forecasting scenarios.
-- Metrics: MAE, RMSE, and MAPE.
-- Segment-level validation by category/store to detect underperforming slices.
-
-### Results
-- Prophet improved MAE by 15% vs baseline.
-- Best configuration reduced forecast bias during holiday peaks.
-- More stable predictions for low-volume categories after feature smoothing.
-
-### Business Impact
-- Better replenishment planning and lower risk of stockout periods.
-- Improved promotion planning with clearer demand expectations.
-- Framework ready for monthly retraining and dashboard integration.
-
-### Tech Stack
-- Python, Pandas, NumPy
-- Statsmodels, Prophet, Scikit-learn
-- Matplotlib / Seaborn
-- Jupyter Notebook
-        `,
-        tags: ["Python", "Time Series", "Forecasting", "Prophet", "ARIMA"],
-        imageUrl: "https://images.unsplash.com/photo-1543286386-2e659306cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        githubUrl: "https://github.com/frankchip2023",
-        codeTitle: "Code (GitHub)",
-        kaggleUrl: "https://www.kaggle.com/frankchipana",
-        datasetTitle: "Kaggle Profile"
-    },
-    {
         id: "customer-segmentation",
         title: "Customer Segmentation Clustering",
         description: "Customer segmentation pipeline using unsupervised learning to uncover behavioral groups and drive targeted retention and campaign strategies.",
@@ -257,44 +209,53 @@ Identify meaningful customer segments based on behavior and value signals to sup
 - Product usage and channel interaction metrics.
 - Campaign response history.
 
-### Methodology
-1. Data cleaning and outlier handling.
-2. Feature scaling and transformation.
-3. Exploratory analysis of customer behavior distributions.
-4. Clustering model selection and tuning.
-5. Segment profiling and business interpretation.
+{{DATASET_HEAD_IMAGE}}
+
+### Exploratory Data Analysis (EDA)
+1. Compared customer behavior by parenthood status using pairwise distributions to see how Income, Recency, Customer_For, Age, and Spent differ across groups.
+2. Checked density shifts and spread to identify segments with higher spend and longer tenure.
+3. Built a correlation matrix to detect strongly related variables and potential redundancy in purchase channels.
+4. Used the EDA insights to decide which features would drive clustering and which could be simplified.
+
+{{METHODOLOGY_IMAGE}}
+{{METHODOLOGY_IMAGE_2}}
 
 ### Feature Engineering
-- RFM-style features (Recency, Frequency, Monetary).
-- Ratios such as average order value and engagement rate.
-- Standardization with StandardScaler.
-- PCA projection for visualization and noise reduction.
+- Derived customer Age from Year_Birth.
+- Built Spent as the total amount spent across product categories over two years.
+- Created Living_With from Marital_Status to capture household living situation.
+- Created Children as the total number of kids and teenagers in the household.
+- Added Family_Size for clearer household segmentation.
+- Added Is_Parent to indicate parenthood status.
+- Simplified Education into three categories for cleaner grouping.
+- Applied OneHotEncoder for categorical variables.
+- Applied StandardScaler for numerical variables.
+- Used PCA to reduce dimensionality and keep the most informative variance for clustering.
+- Dropped redundant or low-signal features.
 
-### Models Compared
-- K-Means (primary model).
-- Hierarchical clustering (benchmark).
-- DBSCAN (noise-aware benchmark).
+{{FEATURE_ENGINEERING_IMAGE}}
 
-### Validation Strategy
-- Elbow Method and Silhouette Score for cluster count selection.
-- Cluster size balance checks to avoid impractical micro-segments.
-- Stability analysis across random seeds and time windows.
+### Modeling Approach
+- K-Means (primary model) with Elbow Method to select the optimal number of clusters.
+- Agglomerative Clustering to explore hierarchical structure and improve interpretability using dendrograms.
+- Best suited for small-to-medium cluster structures where relationships between groups matter.
 
-### Segment Profiles (Example)
-1. High Value Loyalists: high frequency, high spend, low churn risk.
-2. Price Sensitive Occasionals: moderate frequency, promo-driven purchases.
-3. At-Risk Customers: declining activity, low engagement, high churn probability.
-4. New Growth Segment: recent acquisition with rising activity trend.
+{{MODELS_IMAGE}}
+
+### Segment Profiles
+After forming the clusters and reviewing their purchase behavior, I profiled each group to understand who the “star” customers are and which segments need more attention from the marketing team.
+To do this, I focused on key drivers by cluster such as Income, Recency, Customer_For, Age, Spent, Children, Family_Size, and Is_Parent, plus a few high-signal product/channel metrics like Wines, Meat, NumWebPurchases, and NumStorePurchases. Based on these patterns, I summarized each segment and translated the insights into clear marketing priorities.
+
+{{PROFILING_IMAGE}}
+{{PROFILING_IMAGE_2}}
 
 ### Results
-- Identified 4 actionable customer segments.
-- Improved campaign targeting design with segment-specific messaging.
-- Clear separation achieved with strong silhouette performance.
+The analysis reveals that customer segmentation is primarily driven by spending behavior rather than demographic variables such as age or customer tenure. High-spending clusters are predominantly composed of customers with smaller household sizes and fewer children, while lower-spending clusters tend to include larger families. This suggests that family structure plays a significant role in purchasing capacity. Customer tenure shows no strong correlation with spending, indicating that loyalty is not solely time-dependent but behavior-driven.
 
 ### Business Impact
-- Better allocation of marketing spend by segment value.
-- Improved retention strategy for at-risk cohorts.
-- Foundation created for personalized recommendation workflows.
+This segmentation enabled targeted campaigns aligned to spending capacity and household structure, improving marketing efficiency and reducing wasted budget.
+It also provided a clear framework for prioritizing retention outreach and tailoring promotions by channel preference (web, catalog, store).
+The final cluster definitions serve as a reusable foundation for personalization, recommendation, and lifecycle strategies.
 
 ### Tech Stack
 - Python, Pandas, NumPy
@@ -303,74 +264,89 @@ Identify meaningful customer segments based on behavior and value signals to sup
 - Jupyter Notebook
         `,
         tags: ["Python", "Clustering", "K-Means", "PCA", "Customer Analytics"],
-        imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        githubUrl: "https://github.com/frankchip2023",
-        codeTitle: "Code (GitHub)",
-        kaggleUrl: "https://www.kaggle.com/frankchipana",
-        datasetTitle: "Kaggle Profile"
+        imageUrl: segmentationCardImage,
+        githubUrl: "https://www.kaggle.com/code/frankchipana/clustering-customer-personality-analysis",
+        codeTitle: "Code (Kaggle)",
+        kaggleUrl: "https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis",
+        datasetTitle: "Kaggle Dataset",
+        overviewImage: segmentationDatasetHead,
+        analysisImage: segmentationMethodology,
+        initialDataImage: segmentationMethodologySecond,
+        numericalDistributionImage: segmentationFeatureEngineering,
+        modelsImage: segmentationModelsCompared,
+        modelsImageSecondary: segmentationModelingApproachSecond,
+        modelsImageTertiary: segmentationModelingApproachThird,
+        profilingImage: segmentationProfiling,
+        profilingImageSecondary: segmentationProfilingSecond
     },
     {
         id: "credit-risk-analysis",
-        title: "Credit Risk Analysis",
-        description: "Credit risk modeling pipeline to estimate default probability and support safer, data-driven lending decisions.",
+        title: "RAG Assistant Deployment (Portfolio Chatbot)",
+        description: "End-to-end Retrieval-Augmented Generation project integrated into this portfolio, with a Python RAG backend and a React chatbot UI.",
         longDescription: `
 ### Business Context
-Credit teams need reliable default-risk estimates to approve loans faster while controlling losses and regulatory exposure.
+I wanted my portfolio to do more than show static projects. The goal was to let visitors ask questions and get grounded answers from indexed documents in real time.
 
 ### Project Goal
-Build a classification model that predicts customer default probability and helps prioritize high-risk applications for manual review.
+Transform the initial local RAG prototype into a working web feature connected to the portfolio:
+- Python agent for retrieval and generation.
+- HTTP API layer to expose chat endpoints.
+- Frontend chatbot integrated into the portfolio UI.
 
 ### Dataset Scope
-- Applicant demographics and income features.
-- Credit behavior indicators and payment history.
-- Loan attributes (term, amount, interest profile).
-- Historical default label as target variable.
+- Course and technical PDFs stored as local documents.
+- Documents split into chunks and embedded.
+- Vector search over Azure Cosmos DB for context retrieval.
 
 ### Methodology
-1. Data quality checks and missing-value treatment.
-2. Categorical encoding and numeric scaling.
-3. Class imbalance handling.
-4. Model training and hyperparameter tuning.
-5. Threshold analysis aligned with business risk tolerance.
+1. Refactored the original CLI-only agent to support both CLI and API execution modes.
+2. Encapsulated RAG flow into a service layer for reuse.
+3. Added API routes for health checks, index connection, reindexing, and chat.
+4. Built a floating chatbot component in React and mounted it globally in the main layout.
+5. Connected frontend requests to backend responses with source references.
+6. Validated end-to-end flow with lint/build checks and runtime tests.
 
 ### Feature Engineering
-- Debt-to-income and utilization ratios.
-- Payment delay aggregates and behavior trend features.
-- Encoding for high-cardinality categories.
-- Optional balancing with SMOTE for minority class recall.
+- Text chunking using recursive splitting.
+- Embeddings generated with HuggingFace sentence-transformers.
+- Vector fields and policies configured for Azure Cosmos DB vector search.
+- Retrieval setup with top-k context injection into the prompt.
 
 ### Models Compared
-- Logistic Regression (interpretable baseline).
-- Random Forest.
-- XGBoost / LightGBM.
+- Gemini-based chat model for generation.
+- Retrieval chain variants using existing index vs. full reindex flow.
+- Frontend UX alternatives for message display and source visibility.
 
 ### Validation Strategy
-- Stratified train/validation/test split.
-- Cross-validation with ROC-AUC, Precision, Recall, F1.
-- Confusion matrix and PR curve for threshold selection.
+- API validation with health and chat calls.
+- Build-time validation with TypeScript and Vite production build.
+- Error handling checks for missing backend connection and missing index state.
 
 ### Results
-- Gradient boosting family delivered the best ROC-AUC.
-- Higher recall for defaulters than baseline logistic model.
-- More stable ranking of risky applicants across folds.
+- Portfolio now includes a functional chatbot connected to the RAG agent.
+- The backend supports both CLI workflow and API workflow.
+- Chat responses include contextual document sources for traceability.
 
 ### Business Impact
-- Improved risk segmentation for underwriting.
-- Better trade-off between approval volume and default risk.
-- Reusable scoring pipeline for future monitoring and retraining.
+- Upgraded portfolio from static showcase to interactive technical demo.
+- Demonstrates practical MLOps-style integration across backend and frontend.
+- Improves recruiter and client engagement by showing deployed AI capability.
 
 ### Tech Stack
 - Python, Pandas, NumPy
-- Scikit-learn, XGBoost, LightGBM, Imbalanced-learn
-- Matplotlib / Seaborn
-- Jupyter Notebook
+- LangChain, Gemini API, HuggingFace Embeddings
+- Azure Cosmos DB (Vector Search)
+- React, TypeScript, Tailwind CSS, Vite
+- HTTP API + chatbot UI integration
         `,
-        tags: ["Python", "Credit Risk", "XGBoost", "LightGBM", "Classification"],
-        imageUrl: "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        tags: ["Python", "RAG", "LangChain", "Azure Cosmos DB", "React Chatbot"],
+        imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
         githubUrl: "https://github.com/frankchip2023",
         codeTitle: "Code (GitHub)",
         kaggleUrl: "https://www.kaggle.com/frankchipana",
-        datasetTitle: "Kaggle Profile"
+        datasetTitle: "Kaggle Profile",
+        demoUrl: "#open-chat",
+        demoTitle: "Try Chatbot"
     },
     {
         id: "ppe-detection",
@@ -440,6 +416,69 @@ Visual inspections were also conducted by running predictions on unseen images t
         githubUrl: "https://github.com/frankchip2023/EPP_Streamlit",
         demoUrl: "https://share.streamlit.io/?utm_source=streamlit&utm_medium=referral&utm_campaign=main&utm_content=-ss-streamlit-io-cloudpagehero",
         overviewImage: ppeOverview
+    },
+    {
+        id: "sales-forecasting",
+        title: "Sales Forecasting Model",
+        description: "End-to-end time series forecasting to predict weekly retail demand and improve inventory, promotion planning, and stock availability.",
+        longDescription: `
+### Business Context
+Retail teams needed reliable weekly sales forecasts to reduce stockouts, avoid overstock, and plan promotions with greater confidence.
+
+### Project Goal
+Build a robust forecasting pipeline that predicts future sales and compares multiple models to select the best performer for production use.
+
+### Dataset Scope
+- Weekly historical sales by product category and store.
+- Calendar variables (month, week, holidays, special campaigns).
+- External signals (price changes and promotional windows).
+
+### Methodology
+1. Data quality checks and missing value treatment.
+2. Time-based feature engineering.
+3. Exploratory analysis of trend, seasonality, and anomalies.
+4. Model training and tuning.
+5. Rolling backtesting and error analysis.
+
+### Feature Engineering
+- Lag features (t-1, t-2, t-4, t-8).
+- Rolling statistics (mean, std, min/max windows).
+- Calendar features (week of year, month, holiday flags).
+- Promotion and pricing indicators.
+
+### Models Compared
+- Seasonal Naive (baseline).
+- ARIMA / SARIMA.
+- Prophet.
+- Gradient Boosting Regressor for tabular time features.
+
+### Validation Strategy
+- Rolling-origin cross-validation to simulate real forecasting scenarios.
+- Metrics: MAE, RMSE, and MAPE.
+- Segment-level validation by category/store to detect underperforming slices.
+
+### Results
+- Prophet improved MAE by 15% vs baseline.
+- Best configuration reduced forecast bias during holiday peaks.
+- More stable predictions for low-volume categories after feature smoothing.
+
+### Business Impact
+- Better replenishment planning and lower risk of stockout periods.
+- Improved promotion planning with clearer demand expectations.
+- Framework ready for monthly retraining and dashboard integration.
+
+### Tech Stack
+- Python, Pandas, NumPy
+- Statsmodels, Prophet, Scikit-learn
+- Matplotlib / Seaborn
+- Jupyter Notebook
+        `,
+        tags: ["Python", "Time Series", "Forecasting", "Prophet", "ARIMA"],
+        imageUrl: "https://images.unsplash.com/photo-1543286386-2e659306cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        githubUrl: "https://github.com/frankchip2023",
+        codeTitle: "Code (GitHub)",
+        kaggleUrl: "https://www.kaggle.com/frankchipana",
+        datasetTitle: "Kaggle Profile"
     },
     {
         id: "coming-soon",

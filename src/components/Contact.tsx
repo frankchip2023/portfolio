@@ -94,7 +94,7 @@ const Contact: React.FC = () => {
                                 Send Email
                             </a>
                             <a
-                                href="/cv-frank-chipana.pdf"
+                                href={`${import.meta.env.BASE_URL}cv-frank-chipana.pdf`}
                                 download
                                 className="inline-flex items-center justify-center gap-2 rounded-lg border border-blue-200 bg-white px-4 py-3 text-sm font-semibold text-blue-700 hover:bg-blue-50 transition-colors"
                             >

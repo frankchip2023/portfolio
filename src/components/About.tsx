@@ -1,5 +1,6 @@
 import React from 'react';
 import { BookOpen, Code, Database, GraduationCap, Award, ExternalLink, Download } from 'lucide-react';
+import profileImage from '../assets/images/profile.jpg';
 
 const About: React.FC = () => {
     return (
@@ -17,13 +18,13 @@ const About: React.FC = () => {
                         <div className="w-64 lg:w-full">
                             <div className="relative h-64 lg:h-auto lg:aspect-square rounded-2xl overflow-hidden shadow-xl transform rotate-3 hover:rotate-0 transition-all duration-300">
                                 <img
-                                    src="/src/assets/images/profile.jpg"
+                                    src={profileImage}
                                     alt="Frank Chipana"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
                             <a
-                                href="/cv-frank-chipana.pdf"
+                                href={`${import.meta.env.BASE_URL}cv-frank-chipana.pdf`}
                                 download
                                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-blue-700"
                             >

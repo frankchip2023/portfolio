@@ -5,22 +5,9 @@ import os
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from threading import Lock
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from dotenv import load_dotenv
-
-from azure.cosmos import CosmosClient, PartitionKey
-from langchain_azure_ai.vectorstores.azure_cosmos_db_no_sql import (
-    AzureCosmosDBNoSqlVectorSearch,
-)
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_core.documents import Document
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableParallel, RunnablePassthrough
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # ==============================
 # CONFIGURACIÓN GENERAL
@@ -49,7 +36,9 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 
 
-def get_llm() -> ChatGoogleGenerativeAI:
+def get_llm():
+    from langchain_google_genai import ChatGoogleGenerativeAI
+
     if not GEMINI_API_KEY:
         raise ValueError("❌ Falta GEMINI_API_KEY en tu .env")
     return ChatGoogleGenerativeAI(
@@ -58,7 +47,9 @@ def get_llm() -> ChatGoogleGenerativeAI:
         temperature=0.1,
     )
 
-def get_embeddings() -> HuggingFaceEmbeddings:
+def get_embeddings():
+    from langchain_huggingface import HuggingFaceEmbeddings
+
     return HuggingFaceEmbeddings(
         model_name=EMBEDDING_MODEL_NAME,
         model_kwargs={"device": "cpu"},
@@ -66,7 +57,9 @@ def get_embeddings() -> HuggingFaceEmbeddings:
     )
 
 
-def get_cosmos_client() -> CosmosClient:
+def get_cosmos_client():
+    from azure.cosmos import CosmosClient
+
     if not AZURE_COSMOS_DB_ENDPOINT or not AZURE_COSMOS_DB_KEY:
         print("[ERROR] Configure las credenciales de Azure en el archivo .env")
         sys.exit(1)
@@ -77,7 +70,9 @@ def get_cosmos_client() -> CosmosClient:
 # CARGA Y CHUNKING
 # ==============================
 
-def load_pdfs_from_folder(folder_path: str) -> List[Document]:
+def load_pdfs_from_folder(folder_path: str) -> List[Any]:
+    from langchain_community.document_loaders import PyPDFLoader
+
     pdf_paths = glob.glob(os.path.join(folder_path, "*.pdf"))
     if not pdf_paths:
         return []
@@ -89,8 +84,10 @@ def load_pdfs_from_folder(folder_path: str) -> List[Document]:
     return docs
 
 
-def split_documents(docs: List[Document], chunk_size: int = 1000, chunk_overlap: int = 100) -> List[Document]:
+def split_documents(docs: List[Any], chunk_size: int = 1000, chunk_overlap: int = 100) -> List[Any]:
     if not docs: return []
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+
     splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     return splitter.split_documents(docs)
 
@@ -128,8 +125,13 @@ def get_policies() -> tuple:
     return indexing_policy, vector_embedding_policy, full_text_policy
 
 
-def build_vector_store_in_cosmos(docs: List[Document],
-                                 embeddings: HuggingFaceEmbeddings) -> AzureCosmosDBNoSqlVectorSearch:
+def build_vector_store_in_cosmos(docs: List[Any],
+                                 embeddings: Any):
+    from azure.cosmos import PartitionKey
+    from langchain_azure_ai.vectorstores.azure_cosmos_db_no_sql import (
+        AzureCosmosDBNoSqlVectorSearch,
+    )
+
     cosmos_client = get_cosmos_client()
     indexing_policy, vector_embedding_policy, full_text_policy = get_policies()
 
@@ -165,7 +167,12 @@ def build_vector_store_in_cosmos(docs: List[Document],
     )
 
 
-def get_vector_store_for_existing_data(embeddings: HuggingFaceEmbeddings) -> AzureCosmosDBNoSqlVectorSearch:
+def get_vector_store_for_existing_data(embeddings: Any):
+    from azure.cosmos import PartitionKey
+    from langchain_azure_ai.vectorstores.azure_cosmos_db_no_sql import (
+        AzureCosmosDBNoSqlVectorSearch,
+    )
+
     cosmos_client = get_cosmos_client()
     indexing_policy, vector_embedding_policy, full_text_policy = get_policies()
 
@@ -203,7 +210,11 @@ def get_vector_store_for_existing_data(embeddings: HuggingFaceEmbeddings) -> Azu
 # RAG CHAIN & CLI
 # ==============================
 
-def build_rag_chain(vector_store: AzureCosmosDBNoSqlVectorSearch, llm: ChatGoogleGenerativeAI):
+def build_rag_chain(vector_store: Any, llm: Any):
+    from langchain_core.output_parsers import StrOutputParser
+    from langchain_core.prompts import ChatPromptTemplate
+    from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+
     retriever = vector_store.as_retriever(search_kwargs={"k": 4})
 
     system_prompt = (
@@ -219,7 +230,7 @@ def build_rag_chain(vector_store: AzureCosmosDBNoSqlVectorSearch, llm: ChatGoogl
         ("human", "User Question: {input}\n\nContext:\n{context}\n\nAnswer:"),
     ])
 
-    def format_docs(docs: List[Document]) -> str:
+    def format_docs(docs: List[Any]) -> str:
         return "\n\n".join(d.page_content for d in docs)
 
     answer_chain = (
@@ -238,17 +249,17 @@ def print_answer_with_sources(result: dict):
 
 class RAGService:
     def __init__(self):
-        self._llm: Optional[ChatGoogleGenerativeAI] = None
-        self._embeddings: Optional[HuggingFaceEmbeddings] = None
+        self._llm: Optional[Any] = None
+        self._embeddings: Optional[Any] = None
         self._rag_chain = None
         self._lock = Lock()
 
-    def _get_llm(self) -> ChatGoogleGenerativeAI:
+    def _get_llm(self):
         if self._llm is None:
             self._llm = get_llm()
         return self._llm
 
-    def _get_embeddings(self) -> HuggingFaceEmbeddings:
+    def _get_embeddings(self):
         if self._embeddings is None:
             self._embeddings = get_embeddings()
         return self._embeddings

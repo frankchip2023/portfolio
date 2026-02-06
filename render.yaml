@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: portfolio-rag
+    env: python
+    plan: starter
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: |
+      python src/main.py --mode api --host 0.0.0.0 --port 10000
+    envVars:
+      - key: AZURE_COSMOS_DB_ENDPOINT
+        sync: false
+      - key: AZURE_COSMOS_DB_KEY
+        sync: false
+      - key: COSMOS_DB_NAME
+        sync: false
+      - key: COSMOS_CONTAINER_NAME
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        sync: false
+      - key: DOCS_DIR
+        value: ./src/documentos_subidos
+      - key: CORS_ORIGINS
+        value: https://frankchip2023.github.io/portfolio

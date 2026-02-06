@@ -1,19 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
-import Home from './pages/Home';
-import ProjectDetail from './pages/ProjectDetail';
+import { RouterProvider } from '@tanstack/react-router';
+import { router } from './router';
 
 function App() {
-  return (
-    <Router>
-      <MainLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/project/:id" element={<ProjectDetail />} />
-        </Routes>
-      </MainLayout>
-    </Router>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

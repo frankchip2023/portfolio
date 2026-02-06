@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link, useParams } from '@tanstack/react-router';
 import { ArrowLeft, Github, Database, Play } from 'lucide-react';
 import { projects } from '../data/projects';
 
 const ProjectDetail: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams({ from: '/project/$id' });
     const project = projects.find(p => p.id === id);
     const isOpenChatDemo = project?.demoUrl === '#open-chat';
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useRouterState } from '@tanstack/react-router';
 
 const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const location = useLocation();
+    const { location } = useRouterState();
     const navigate = useNavigate();
 
     const toggleMenu = () => setIsOpen(!isOpen);
@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
     const handleNavigation = (id: string) => {
         setIsOpen(false);
         if (location.pathname !== '/') {
-            navigate('/', { state: { scrollTo: id } });
+            navigate({ to: '/', hash: `#${id}` });
         } else {
             const element = document.getElementById(id);
             if (element) {

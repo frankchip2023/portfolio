@@ -1,6 +1,6 @@
 import React from 'react';
 import { Github, ExternalLink, Database } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 
 interface ProjectCardProps {
     id: string;
@@ -24,7 +24,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ id, title, description, tags,
 
     return (
         <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full border border-gray-100 group">
-            <Link to={`/project/${id}`} className="block relative h-48 overflow-hidden cursor-pointer">
+            <Link to="/project/$id" params={{ id }} className="block relative h-48 overflow-hidden cursor-pointer">
                 <img
                     src={imageUrl}
                     alt={title}
@@ -38,7 +38,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ id, title, description, tags,
             </Link>
 
             <div className="p-6 flex flex-col flex-grow">
-                <Link to={`/project/${id}`} className="block">
+                <Link to="/project/$id" params={{ id }} className="block">
                     <h3 className="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">{title}</h3>
                 </Link>
                 <p className="text-gray-600 mb-4 text-sm leading-relaxed flex-grow">

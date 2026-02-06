@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react';
+import { useRouterState } from '@tanstack/react-router';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import Projects from '../components/Projects';
 import Contact from '../components/Contact';
-import { useLocation } from 'react-router-dom';
 
 const Home: React.FC = () => {
-    const location = useLocation();
+    const { location } = useRouterState();
 
     useEffect(() => {
-        if (location.state && location.state.scrollTo) {
-            const element = document.getElementById(location.state.scrollTo);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
+        if (!location.hash) return;
+        const targetId = location.hash.replace('#', '');
+        if (!targetId) return;
+        const element = document.getElementById(targetId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [location]);
+    }, [location.hash]);
 
     return (
         <main>

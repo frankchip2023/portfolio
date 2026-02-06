@@ -317,8 +317,14 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         self._set_headers(200)
 
+    def do_HEAD(self):
+        if self.path in ("/", "/health"):
+            self._set_headers(200)
+            return
+        self._set_headers(404)
+
     def do_GET(self):
-        if self.path == "/health":
+        if self.path in ("/", "/health"):
             self._write_json({"status": "ok"})
             return
         self._write_json({"detail": "Not found"}, status_code=404)

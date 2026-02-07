@@ -11,7 +11,7 @@ const Hero: React.FC = () => {
                         <span className="text-blue-600 text-4xl md:text-6xl">Data Scientist</span>
                     </h1>
                     <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                        Specialized in predictive modeling, computer vision, and building end-to-end data solutions. Based in Oslo, Norway.
+                        Specialized in predictive modeling, computer vision, and building end-to-end data solutions.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <a

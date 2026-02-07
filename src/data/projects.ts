@@ -24,6 +24,7 @@ import segmentationProfilingSecond from '../assets/images/segmentation_profiling
 import segmentationCardImage from '../assets/images/segmentation_card.png';
 import ppeOverview from '../assets/images/ppe_overview.png';
 import ppeMain from '../assets/images/ppe_main.jpg';
+import ragProjectScheme from '../../diagram.png';
 
 export interface Project {
     id: string;
@@ -38,6 +39,7 @@ export interface Project {
     demoTitle?: string;
     codeTitle?: string;
     overviewImage?: string; // Single image to be embedded in description
+    projectSchemeImage?: string; // System / topology diagram (RAG deployment)
     datasetSchema?: { category: string; variables: string }[];
     analysisImage?: string; // Image for the Analysis Objective section
     initialDataImage?: string; // Image for Initial Data Inspection
@@ -284,6 +286,9 @@ The final cluster definitions serve as a reusable foundation for personalization
         title: "RAG Assistant Deployment (Portfolio Chatbot)",
         description: "End-to-end Retrieval-Augmented Generation project integrated into this portfolio, with a Python RAG backend and a React chatbot UI.",
         longDescription: `
+### Project Scheme
+{{PROJECT_SCHEME_IMAGE}}
+
 ### Business Context
 I wanted my portfolio to do more than show static projects. The goal was to let visitors ask questions and get grounded answers from indexed documents in real time.
 
@@ -341,6 +346,7 @@ Transform the initial local RAG prototype into a working web feature connected t
         `,
         tags: ["Python", "RAG", "LangChain", "Azure Cosmos DB", "React Chatbot"],
         imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        projectSchemeImage: ragProjectScheme,
         githubUrl: "https://github.com/frankchip2023",
         codeTitle: "Code (GitHub)",
         kaggleUrl: "https://www.kaggle.com/frankchipana",

@@ -155,6 +155,18 @@ const ProjectDetail: React.FC = () => {
                                     </div>
                                 );
                             }
+                            if (line.trim() === '{{PROJECT_SCHEME_IMAGE}}' && project.projectSchemeImage) {
+                                return (
+                                    <div key={index} className="my-10 rounded-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                                        <img
+                                            src={project.projectSchemeImage}
+                                            alt="Project Scheme"
+                                            className="w-full h-auto object-contain bg-white"
+                                        />
+                                        <p className="text-center text-sm text-gray-500 py-2 bg-gray-50">Project Scheme</p>
+                                    </div>
+                                );
+                            }
                             if (line.trim() === '{{METHODOLOGY_IMAGE}}' && project.analysisImage) {
                                 return (
                                     <div key={index} className="my-8 rounded-xl overflow-hidden shadow-lg border border-gray-100">

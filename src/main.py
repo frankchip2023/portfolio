@@ -223,6 +223,9 @@ def build_rag_chain(vector_store: Any, llm: Any):
         "1. Use only the provided context.\n"
         "2. If unknown, say: \"I do not know with the information available.\"\n"
         "3. Always respond in English.\n"
+        "4. Format your answer as clean, readable Markdown.\n"
+        "5. Prefer short sections with headings and bullet points.\n"
+        "6. Keep lines short and insert blank lines between sections.\n"
     )
 
     prompt = ChatPromptTemplate.from_messages([
@@ -286,11 +289,9 @@ class RAGService:
             raise RuntimeError("El agente no está inicializado. Use índice existente o reindexe.")
 
         result = self._rag_chain.invoke(message)
-        sources = [
-            f"{doc.metadata.get('source')} (Page {doc.metadata.get('page')})"
-            for doc in result.get("context_docs", [])
-        ]
-        return {"answer": result["answer"], "sources": sources}
+        # Only return the final answer. We intentionally omit document sources
+        # to keep responses clean in the portfolio chatbot UI.
+        return {"answer": result["answer"]}
 
 
 rag_service = RAGService()
@@ -385,8 +386,6 @@ def run_cli():
             else:
                 result = rag_service.ask(user_input)
                 print("\nRESPONSE:\n" + "-" * 40 + f"\n{result['answer']}\n" + "-" * 40)
-                for i, source in enumerate(result["sources"], 1):
-                    print(f"[{i}] {source}")
         except Exception as exc:
             print(f"[ERROR] {exc}")
 

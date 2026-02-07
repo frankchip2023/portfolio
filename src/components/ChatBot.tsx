@@ -6,12 +6,10 @@ interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
-  sources?: string[];
 }
 
 interface ChatApiResponse {
   answer: string;
-  sources: string[];
 }
 
 const ChatBot: React.FC = () => {
@@ -72,7 +70,6 @@ const ChatBot: React.FC = () => {
           id: crypto.randomUUID(),
           role: 'assistant',
           content: data.answer,
-          sources: data.sources,
         },
       ]);
     } catch (error) {
@@ -115,15 +112,10 @@ const ChatBot: React.FC = () => {
                     message.role === 'user'
                       ? 'ml-8 bg-blue-600 text-white'
                       : 'mr-8 bg-gray-100 text-gray-800'
-                  }`}
+                  } whitespace-pre-wrap break-words`}
                 >
                   {message.content}
                 </div>
-                {message.role === 'assistant' && message.sources && message.sources.length > 0 && (
-                  <p className="mt-1 mr-8 text-xs text-gray-500">
-                    Sources: {message.sources.slice(0, 2).join(' | ')}
-                  </p>
-                )}
               </div>
             ))}
             {isLoading && <p className="text-sm text-gray-500">Thinking...</p>}

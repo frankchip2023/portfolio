@@ -94,7 +94,7 @@ const About: React.FC = () => {
                                     className="mt-3 inline-flex items-center gap-2 rounded-md border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700 hover:bg-green-100 transition-colors"
                                 >
                                     <ExternalLink size={12} />
-                                    View / Download Credential
+                                    View Credential
                                 </a>
                             </div>
 

@@ -21,7 +21,7 @@ const ChatBot: React.FC = () => {
       id: 'welcome',
       role: 'assistant',
       content:
-        'Hi! I am connected to your RAG agent. Ask me anything about your indexed documents.',
+        'Hi! I am Frank Chipana\'s portfolio chatbot. I can share information about his CV, projects, skills, experience, and contact details. What would you like to know?',
     },
   ]);
 

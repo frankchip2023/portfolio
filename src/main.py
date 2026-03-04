@@ -235,7 +235,8 @@ def build_rag_chain(vector_store: Any, llm: Any):
         "2. If the context does not contain the answer, use the exact out-of-scope message above.\n"
         "3. Match the user's language when possible (English or Spanish).\n"
         "4. Keep answers concise and clear.\n"
-        "5. Format long answers as readable Markdown with short sections and bullet points.\n"
+        "5. Return plain text only. Do not use Markdown symbols such as #, *, -, or **.\n"
+        "6. If listing items, use simple numbered lines like 1. 2. 3.\n"
     )
 
     prompt = ChatPromptTemplate.from_messages([
